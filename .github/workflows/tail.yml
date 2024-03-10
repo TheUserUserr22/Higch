@@ -14,7 +14,7 @@ jobs:
       - name: chuẩn bị phần mềm
         run: |
           sudo apt update -y
-          sudo apt install qemu-kvm cpulimit wget -y
+          sudo apt install qemu-kvm cpulimit aria2 -y
           curl -fsSL https://tailscale.com/install.sh | sh
           sudo tailscale up
       - name: cài win và khởi chạy
@@ -22,7 +22,7 @@ jobs:
           sudo chmod 666 /dev/kvm
           sudo qemu-img create -f qcow2 /mnt/a.qcow2 60G
           sudo qemu-img create -f raw a.img 20G
-          wget -O file.iso "${{ github.event.inputs.link_iso }}" &>/dev/null &
+          aria2c -s16 -x16 -o file.iso "${{ github.event.inputs.link_iso }}" &>/dev/null &
           while ps axg | grep -vw grep | grep -w wget > /dev/null; do sleep 1; done
           wget -O driver.iso https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.240-1/virtio-win-0.1.240.iso &>/dev/null &
           while ps axg | grep -vw grep | grep -w wget > /dev/null; do sleep 1; done
